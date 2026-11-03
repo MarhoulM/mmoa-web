@@ -1,0 +1,69 @@
+# PROPOSAL ONLY — not activated for automatic publish.
+#
+# Publishes the allowlist artifact built by scripts/prepare-publish.mjs
+# to GitHub Pages via Actions artifact upload.
+#
+# Safety:
+# - Trigger is workflow_dispatch ONLY (no push / no schedule).
+# - Job requires GitHub Environment "publication-approval"
+#   (configure required reviewers before first use).
+# - Do NOT add "on: push" without explicit human approval.
+#
+# Creating .publish/ locally does NOT change Pages by itself.
+# Repository Settings → Pages must use "GitHub Actions" as source
+# for this workflow to take effect (separate manual change).
+
+name: Pages from allowlist artifact
+
+on:
+  workflow_dispatch:
+    inputs:
+      confirm:
+        description: 'Type PUBLISH to confirm intentional deploy'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages-publish
+  cancel-in-progress: false
+
+jobs:
+  build:
+    name: Build allowlist artifact
+    runs-on: ubuntu-latest
+    # Gate: refuse unless the operator typed PUBLISH
+    if: ${{ github.event.inputs.confirm == 'PUBLISH' }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Build .publish allowlist
+        run: node scripts/prepare-publish.mjs
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: .publish
+
+  deploy:
+    name: Deploy to GitHub Pages
+    needs: build
+    runs-on: ubuntu-latest
+    # Require a protected Environment with reviewers before deploy runs.
+    environment:
+      name: publication-approval
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4

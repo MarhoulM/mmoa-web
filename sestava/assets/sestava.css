@@ -1,0 +1,374 @@
+/* Sestava design tokens — mirrored from Flutter lib/app/theme.dart (light default).
+   Scoped to .sestava pages only. Do not load on MMOA home / MathOut. */
+
+.sestava {
+  --s-primary: #20376f;
+  --s-secondary: #3a5a9a;
+  --s-accent: #e72b4b;
+  --s-accent-strong: #b91c3a;
+  --s-bg: #f4f6fa;
+  --s-surface: #ffffff;
+  --s-on-surface: #171b25;
+  --s-on-surface-variant: #5a6478;
+  --s-outline: #c5cddb;
+  --s-surface-variant: #e8ecf4;
+  --s-primary-container: #d9e2f5;
+  --s-on-primary: #ffffff;
+  --s-success: #1b7a4e;
+  --s-warning: #b86a00;
+  --s-error: #c62828;
+  --s-error-container: #fdecea;
+  --s-radius: 12px;
+  --s-space-xs: 4px;
+  --s-space-sm: 8px;
+  --s-space-md: 12px;
+  --s-space-lg: 16px;
+  --s-space-xl: 24px;
+  --s-space-xxl: 32px;
+  --s-page-max: 560px;
+  --s-font: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --s-focus: 3px solid var(--s-primary);
+
+  box-sizing: border-box;
+  margin: 0;
+  min-height: 100vh;
+  font-family: var(--s-font);
+  background: var(--s-bg);
+  color: var(--s-on-surface);
+  line-height: 1.5;
+  color-scheme: light;
+}
+
+.sestava *,
+.sestava *::before,
+.sestava *::after {
+  box-sizing: border-box;
+}
+
+.sestava a {
+  color: var(--s-primary);
+  font-weight: 650;
+  text-underline-offset: 0.2em;
+}
+
+.sestava a:focus-visible {
+  outline: var(--s-focus);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.sestava .wrap {
+  width: min(100% - 2.5rem, var(--s-page-max));
+  margin-inline: auto;
+}
+
+.sestava .site-header {
+  border-bottom: 1px solid var(--s-outline);
+  background: var(--s-surface);
+}
+
+.sestava .site-header .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--s-space-sm);
+  padding-block: var(--s-space-lg);
+}
+
+.sestava .brand {
+  color: var(--s-primary);
+  font-weight: 750;
+  letter-spacing: 0.04em;
+  text-decoration: none;
+}
+
+.sestava .nav-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-space-md);
+  font-size: 0.92rem;
+}
+
+.sestava .nav-links a {
+  text-decoration: none;
+}
+
+.sestava .nav-links a:hover {
+  text-decoration: underline;
+}
+
+.sestava main.wrap {
+  padding-block: var(--s-space-xxl) 5rem;
+}
+
+.sestava .eyebrow {
+  margin: 0;
+  color: var(--s-secondary);
+  font-size: 0.8rem;
+  font-weight: 750;
+  letter-spacing: 0.13em;
+  text-transform: uppercase;
+}
+
+.sestava h1 {
+  margin: var(--s-space-sm) 0 var(--s-space-sm);
+  font-size: clamp(2rem, 7vw, 2.75rem);
+  line-height: 1.15;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+}
+
+.sestava h2 {
+  margin: var(--s-space-xl) 0 var(--s-space-md);
+  font-size: 1.35rem;
+  font-weight: 600;
+  line-height: 1.25;
+}
+
+.sestava h3 {
+  margin: 0 0 var(--s-space-sm);
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.sestava .lead,
+.sestava .muted {
+  color: var(--s-on-surface-variant);
+}
+
+.sestava .lead {
+  font-size: 1.05rem;
+  margin: 0 0 var(--s-space-xl);
+}
+
+.sestava .card {
+  padding: var(--s-space-lg);
+  border: 1px solid var(--s-outline);
+  border-radius: var(--s-radius);
+  background: var(--s-surface);
+  margin-bottom: var(--s-space-lg);
+}
+
+.sestava .card--accent {
+  border-color: var(--s-primary-container);
+  background: var(--s-primary-container);
+}
+
+.sestava .card p:last-child,
+.sestava .card ul:last-child {
+  margin-bottom: 0;
+}
+
+.sestava ul {
+  padding-left: 1.2rem;
+  margin: var(--s-space-sm) 0;
+}
+
+.sestava li {
+  margin: var(--s-space-xs) 0;
+}
+
+.sestava .stack {
+  display: grid;
+  gap: var(--s-space-md);
+}
+
+.sestava .actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-space-md);
+  margin-top: var(--s-space-lg);
+}
+
+.sestava .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 48px;
+  padding: 0 var(--s-space-lg);
+  border-radius: var(--s-radius);
+  border: 1px solid transparent;
+  font: inherit;
+  font-weight: 600;
+  font-size: 0.9rem;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.sestava .btn:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.sestava .btn:focus-visible {
+  outline: var(--s-focus);
+  outline-offset: 3px;
+}
+
+.sestava .btn-filled {
+  background: var(--s-primary);
+  color: var(--s-on-primary);
+}
+
+.sestava .btn-filled:hover:not(:disabled) {
+  background: var(--s-secondary);
+}
+
+.sestava .btn-danger {
+  background: var(--s-error);
+  color: #fff;
+}
+
+.sestava .btn-danger:hover:not(:disabled) {
+  background: var(--s-accent-strong);
+}
+
+.sestava .btn-outlined {
+  background: transparent;
+  border-color: var(--s-outline);
+  color: var(--s-primary);
+}
+
+.sestava .btn-text {
+  background: transparent;
+  color: var(--s-primary);
+  min-height: 40px;
+}
+
+.sestava .banner {
+  padding: var(--s-space-md) var(--s-space-lg);
+  border-radius: var(--s-radius);
+  margin-bottom: var(--s-space-lg);
+  font-size: 0.92rem;
+}
+
+.sestava .banner--warn {
+  background: #fff6e8;
+  border: 1px solid #f0d2a0;
+  color: var(--s-warning);
+}
+
+.sestava .banner--error {
+  background: var(--s-error-container);
+  border: 1px solid #f0b4b4;
+  color: var(--s-error);
+}
+
+.sestava .banner--ok {
+  background: #e6f5ec;
+  border: 1px solid #a8d9bc;
+  color: var(--s-success);
+}
+
+.sestava .banner--info {
+  background: var(--s-primary-container);
+  border: 1px solid var(--s-outline);
+  color: var(--s-primary);
+}
+
+.sestava .draft-badge {
+  display: inline-block;
+  margin-left: var(--s-space-sm);
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--s-surface-variant);
+  color: var(--s-on-surface-variant);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  vertical-align: middle;
+}
+
+.sestava label {
+  display: block;
+  font-weight: 600;
+  font-size: 0.875rem;
+  margin-bottom: var(--s-space-xs);
+}
+
+.sestava .field {
+  margin-bottom: var(--s-space-lg);
+}
+
+.sestava input[type="email"],
+.sestava input[type="password"],
+.sestava input[type="text"] {
+  width: 100%;
+  min-height: 48px;
+  padding: var(--s-space-md) var(--s-space-lg);
+  border: 1px solid var(--s-outline);
+  border-radius: var(--s-radius);
+  background: var(--s-surface);
+  color: var(--s-on-surface);
+  font: inherit;
+}
+
+.sestava input:focus-visible {
+  outline: var(--s-focus);
+  outline-offset: 2px;
+}
+
+.sestava .sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.sestava footer {
+  border-top: 1px solid var(--s-outline);
+  padding: var(--s-space-xl) 0 var(--s-space-xxl);
+  color: var(--s-on-surface-variant);
+  font-size: 0.9rem;
+}
+
+.sestava footer .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--s-space-md);
+  justify-content: space-between;
+}
+
+.sestava .toc {
+  padding: var(--s-space-lg);
+  border: 1px solid var(--s-outline);
+  border-radius: var(--s-radius);
+  background: var(--s-surface);
+  margin: var(--s-space-xl) 0;
+}
+
+.sestava .toc ul {
+  columns: 2;
+  margin: var(--s-space-xs) 0 0;
+}
+
+.sestava section {
+  padding: var(--s-space-lg) 0;
+  border-top: 1px solid var(--s-outline);
+}
+
+.sestava .hidden {
+  display: none !important;
+}
+
+.sestava .busy {
+  opacity: 0.7;
+  pointer-events: none;
+}
+
+@media (max-width: 36rem) {
+  .sestava .toc ul {
+    columns: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sestava * {
+    scroll-behavior: auto !important;
+  }
+}

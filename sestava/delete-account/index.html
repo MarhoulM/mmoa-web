@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Samoobslužné smazání účtu Sestava.">
+  <meta name="robots" content="noindex">
+  <title>Smazat účet · Sestava</title>
+  <link rel="stylesheet" href="../assets/sestava.css">
+</head>
+<body class="sestava">
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../">Sestava</a>
+      <nav class="nav-links" aria-label="Sestava">
+        <a href="../privacy/">Soukromí</a>
+        <a href="../support/">Podpora</a>
+        <a href="../../">MMOA</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <p class="eyebrow">Sestava · Účet</p>
+    <h1>Smazat účet</h1>
+    <p class="lead">
+      Trvale odstraní přihlášení a osobní údaje. Týmy s dalšími členy musíte nejdřív předat.
+    </p>
+
+    <div id="env-banner" class="banner banner--warn" role="status" hidden></div>
+    <div id="status" class="banner banner--info" role="status" aria-live="polite" hidden></div>
+    <div id="error" class="banner banner--error" role="alert" hidden></div>
+
+    <section id="step-login" class="card" aria-labelledby="login-title">
+      <h2 id="login-title" style="margin-top:0">Přihlášení</h2>
+      <form id="form-login" novalidate>
+        <div class="field">
+          <label for="email">E-mail</label>
+          <input id="email" name="email" type="email" autocomplete="username" required>
+        </div>
+        <div class="field">
+          <label for="password">Heslo</label>
+          <input id="password" name="password" type="password" autocomplete="current-password" required>
+        </div>
+        <button class="btn btn-filled" type="submit" id="btn-login">Přihlásit se</button>
+      </form>
+    </section>
+
+    <section id="step-preflight" class="card hidden" aria-labelledby="preflight-title">
+      <h2 id="preflight-title" style="margin-top:0">Kontrola účtu</h2>
+      <p id="preflight-summary" class="muted"></p>
+      <div id="blockers" class="stack"></div>
+      <div class="actions">
+        <button type="button" class="btn btn-outlined" id="btn-refresh-preflight">Obnovit kontrolu</button>
+        <button type="button" class="btn btn-filled" id="btn-continue" hidden>Pokračovat</button>
+        <button type="button" class="btn btn-text" id="btn-signout">Odhlásit</button>
+      </div>
+    </section>
+
+    <section id="step-reauth" class="card hidden" aria-labelledby="reauth-title">
+      <h2 id="reauth-title" style="margin-top:0">Potvrďte heslem</h2>
+      <p class="muted">Pro bezpečnost zadejte znovu heslo. Obnovení session bez hesla nestačí.</p>
+      <form id="form-reauth" novalidate>
+        <div class="field">
+          <label for="reauth-password">Heslo</label>
+          <input id="reauth-password" name="reauth-password" type="password" autocomplete="current-password" required>
+        </div>
+        <div class="actions">
+          <button class="btn btn-filled" type="submit" id="btn-reauth">Ověřit a pokračovat</button>
+          <button type="button" class="btn btn-text" id="btn-reauth-back">Zpět</button>
+        </div>
+      </form>
+    </section>
+
+    <section id="step-confirm" class="card hidden" aria-labelledby="confirm-title">
+      <h2 id="confirm-title" style="margin-top:0">Opravdu smazat účet?</h2>
+      <ul>
+        <li>Ztratíte možnost se přihlásit.</li>
+        <li>Osobní údaje budou odstraněny; historie týmu může zůstat bez vazby na účet.</li>
+        <li>Ztratíte přístup ke všem týmům.</li>
+        <li>Operace je nevratná.</li>
+      </ul>
+      <div class="actions">
+        <button type="button" class="btn btn-danger" id="btn-confirm-delete">Ano, smazat účet</button>
+        <button type="button" class="btn btn-outlined" id="btn-confirm-cancel">Zrušit</button>
+      </div>
+    </section>
+
+    <section id="step-result" class="card hidden" aria-labelledby="result-title">
+      <h2 id="result-title" style="margin-top:0">Výsledek</h2>
+      <p id="result-message"></p>
+      <div class="actions">
+        <button type="button" class="btn btn-filled" id="btn-retry" hidden>Zkusit znovu</button>
+        <a class="btn btn-outlined" href="../">Zpět na Sestavu</a>
+        <a class="btn btn-text" href="../support/">Podpora</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© MMOA · Sestava</span>
+      <a href="../">Zpět na Sestavu</a>
+    </div>
+  </footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="../assets/config.js"></script>
+  <!-- Optional local override (gitignored). Absent file must not break the page. -->
+  <script src="../assets/config.local.js" onerror="/* no local override */"></script>
+  <script src="../assets/delete-account.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      if (window.SestavaDeleteAccount) {
+        window.SestavaDeleteAccount.boot();
+      }
+    });
+  </script>
+</body>
+</html>

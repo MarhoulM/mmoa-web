@@ -28,12 +28,24 @@
     nav li { break-inside: avoid; padding: .14rem 0; }
     section { padding: 1.15rem 0; border-top: 1px solid #d8e2da; }
     h2 { font-size: 1.42rem; line-height: 1.3; margin: .3rem 0 .7rem; letter-spacing: -.015em; }
-    p, ul { margin: .65rem 0; }
+    p, ul, ol { margin: .65rem 0; }
     li { padding-left: .2rem; margin: .2rem 0; }
+    code { font-size: .92em; }
+    .note { margin: 1rem 0; padding: .85rem 1rem; border: 1px solid #d8e2da; border-radius: .75rem; background: #eef5f0; color: #24352c; }
+    .note strong { color: #126a48; }
     footer { border-top: 1px solid #d8e2da; padding: 1.5rem 0 2rem; color: #53635b; font-size: .9rem; }
     @media (max-width: 36rem) { nav ul { columns: 1; } }
     @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-    @media (prefers-color-scheme: dark) { body { background: #101b16; color: #edf5ee; } .site-header, section, footer { border-color: #344b3a; } nav { background: #192820; border-color: #344b3a; } .updated, footer { color: #b3c6b8; } .eyebrow, a { color: #8de2ae; } a:focus-visible { outline-color: #8de2ae; } }
+    @media (prefers-color-scheme: dark) {
+      body { background: #101b16; color: #edf5ee; }
+      .site-header, section, footer { border-color: #344b3a; }
+      nav { background: #192820; border-color: #344b3a; }
+      .updated, footer { color: #b3c6b8; }
+      .eyebrow, a { color: #8de2ae; }
+      a:focus-visible { outline-color: #8de2ae; }
+      .note { background: #192820; border-color: #344b3a; color: #edf5ee; }
+      .note strong { color: #8de2ae; }
+    }
   </style>
 </head>
 <body>
@@ -41,56 +53,296 @@
   <main class="wrap">
     <p class="eyebrow">Mathout · Android</p>
     <h1>Privacy Policy for Mathout</h1>
-    <p class="updated">Last updated: October 1, 2026</p>
-    <p class="intro">Mathout helps you practice practical math and number sense. Your exercise progress and app preferences are stored on your device. Optional advertising and the one-time ad-free purchase involve the providers described below.</p>
+    <p class="updated">Last updated: November 3, 2026 · Not a final legal policy until the controller name and legal bases are confirmed</p>
+    <p class="intro">
+      Mathout helps you practice practical math and number sense.
+      Exercise progress and app preferences are stored on your device.
+      The current Android release distributed by the operator also uses Google AdMob
+      banner advertising, Google Play Billing, and RevenueCat for the optional
+      “Remove Ads Forever” purchase (see evidence note below).
+    </p>
+    <p class="note">
+      <strong>Evidence note:</strong>
+      AdMob, RevenueCat and Google Play Billing in the current AAB are
+      <em>OWNER CONFIRMED</em>.
+      Independent binary disassembly / Play Console verification of that AAB was
+      <em>NOT</em> completed in this documentation pass
+      (<em>BINARY NOT INDEPENDENTLY VERIFIED</em>).
+      Implementation support for these SDKs is present in the Mathout codebase.
+    </p>
+
     <nav aria-label="On this page"><strong>On this page</strong><ul>
-      <li><a href="#local-data">Data on your device</a></li><li><a href="#accounts">Accounts and direct collection</a></li>
-      <li><a href="#advertising">Advertising</a></li><li><a href="#consent">Consent and choices</a></li>
-      <li><a href="#purchases">Purchases</a></li><li><a href="#revenuecat">RevenueCat</a></li>
-      <li><a href="#services">Third-party services</a></li><li><a href="#retention">Retention and controls</a></li>
-      <li><a href="#children">Children</a></li><li><a href="#security">Security</a></li>
-      <li><a href="#changes">Changes</a></li><li><a href="#contact">Contact</a></li>
+      <li><a href="#controller">Data controller</a></li>
+      <li><a href="#purposes">Purposes</a></li>
+      <li><a href="#legal">Legal bases</a></li>
+      <li><a href="#local-data">Data on your device</a></li>
+      <li><a href="#accounts">Accounts and direct collection</a></li>
+      <li><a href="#advertising">Advertising (AdMob)</a></li>
+      <li><a href="#consent">Consent and UMP</a></li>
+      <li><a href="#purchases">Google Play Billing</a></li>
+      <li><a href="#revenuecat">RevenueCat</a></li>
+      <li><a href="#services">Recipients / third parties</a></li>
+      <li><a href="#retention">Retention</a></li>
+      <li><a href="#rights">Your rights</a></li>
+      <li><a href="#complaint">Complaints (ÚOOÚ)</a></li>
+      <li><a href="#children">Children</a></li>
+      <li><a href="#security">Security</a></li>
+      <li><a href="#changes">Changes</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="#todo">Owner TODOs</a></li>
     </ul></nav>
-    <section id="local-data"><h2>1. Information stored on your device</h2>
-      <p>Mathout saves your assessment status, Number Score, skill scores and counts, difficulty levels, workout summaries (including completion dates, duration and results), streak information, and a random install seed in local app storage. It also saves your language, theme and answer-mode preferences. Individual answers are used to update this progress; the app's saved history consists of workout summaries rather than a log of every answer.</p>
-      <p>Mathout also keeps a local copy of the latest known ad-free entitlement state so it can handle startup and temporary purchase-service failures. This copy is not a payment record or proof of ownership. Mathout's own progress and preference code does not upload these records to a Mathout server. Android device backup or transfer settings may separately affect copies of app data.</p>
+
+    <section id="controller">
+      <h2>1. Data controller</h2>
+      <p>
+        <strong>Controller (natural person):</strong>
+        <code>[LEGAL NAME OF NATURAL PERSON — TO BE CONFIRMED]</code>.
+        The controller is a natural person without a trade licence / company ID (IČO).
+      </p>
+      <p>
+        <strong>Brand:</strong> “MMOA Software” / “MMOA” is a product brand name only.
+        It is <em>not</em> a registered legal entity and must not be treated as the controller
+        identity by itself.
+      </p>
+      <p>
+        <strong>Contact e-mail:</strong> mmoa.software@gmail.com
+        (confirmed contact channel for privacy questions about Mathout).
+      </p>
+      <p>
+        Postal address / other identifiers:
+        <em>[TODO — not invented; add only if required after legal review]</em>.
+      </p>
     </section>
-    <section id="accounts"><h2>2. Accounts and direct collection</h2>
-      <p>Mathout does not offer a Mathout account, registration, login or profile. It does not send your exercise progress to a Mathout account backend. A Google Play account used for a purchase, a RevenueCat App User ID, and advertising identifiers are separate from a Mathout account.</p>
-      <p>Mathout does not send its local exercise progress to an analytics service in its default configuration. Its third-party advertising, consent, purchase and store services may process the data described below.</p>
+
+    <section id="purposes">
+      <h2>2. Purposes of processing</h2>
+      <ul>
+        <li>provide on-device math practice, progress and preference storage;</li>
+        <li>show banner advertising (AdMob) in the current operator-confirmed Android release;</li>
+        <li>process the optional one-time “Remove Ads Forever” purchase via Google Play Billing and RevenueCat;</li>
+        <li>obtain and respect advertising consent / privacy choices via Google UMP;</li>
+        <li>respond to privacy requests sent to the contact e-mail.</li>
+      </ul>
     </section>
-    <section id="advertising"><h2>3. Advertising</h2>
-      <p>Mathout includes a Google AdMob banner placement for Android builds with advertising enabled. Mathout does not use interstitial, rewarded, app-open or native ad placements. A banner request is gated on UMP permitting ad requests and the app determining that ad-free access is not active. No banner is requested while the entitlement state is unknown or ad-free access is confirmed.</p>
-      <p>The Google Mobile Ads SDK may process information such as IP address, app interactions, diagnostics and device or advertising identifiers to deliver, measure and protect ads, and, where applicable, personalize them according to consent and user settings. See <a href="https://developers.google.com/admob/android/privacy/play-data-disclosure">Google's Mobile Ads data disclosure</a> and <a href="https://policies.google.com/privacy">Google's Privacy Policy</a>.</p>
+
+    <section id="legal">
+      <h2>3. Legal bases</h2>
+      <p class="note">
+        <strong>Requires legal confirmation.</strong>
+        Specific GDPR Article 6 bases (for example contract, legitimate interest, or consent)
+        are <em>not</em> stated here until the controller / legal adviser confirms them.
+        Where UMP consent applies to advertising, consent withdrawal is described below.
+      </p>
     </section>
-    <section id="consent"><h2>4. Consent and privacy choices</h2>
-      <p>For an ads-enabled build, Mathout asks Google's User Messaging Platform (UMP) to update consent information when the app starts and shows a consent form if required. Mathout checks whether UMP permits ad requests before requesting a banner. Where UMP requires a privacy-options entry point, you can reopen those choices from Settings → Privacy options. The Privacy Policy link is available in Settings. The choices and messages shown depend on your region and the messages configured for the app. See <a href="https://developers.google.com/admob/flutter/privacy">Google's UMP information</a>.</p>
+
+    <section id="local-data">
+      <h2>4. Information stored on your device (local app data)</h2>
+      <p>
+        Mathout saves assessment status, Number Score, skill scores and counts, difficulty levels,
+        workout summaries (including completion dates, duration and results), streak information,
+        and a random install seed in local app storage. It also saves language, theme and
+        answer-mode preferences. Individual answers update this progress; saved history consists
+        of workout summaries rather than a log of every answer.
+      </p>
+      <p>
+        Mathout also keeps a local copy of the latest known ad-free entitlement state so it can
+        handle startup and temporary purchase-service failures. This copy is not a payment record
+        or proof of ownership. Mathout’s own progress and preference code does not upload these
+        records to a Mathout server. Android backup or transfer settings may separately copy app data.
+      </p>
     </section>
-    <section id="purchases"><h2>5. In-app purchases</h2>
-      <p>Mathout offers an optional one-time “Remove Ads Forever” purchase through Google Play. Google Play handles checkout and payment information. Mathout does not ask for or store your card details. The app reads the resulting purchase and entitlement status to decide whether to show ads, and offers “Restore purchases” in Settings. See <a href="https://policies.google.com/privacy">Google's Privacy Policy</a>.</p>
+
+    <section id="accounts">
+      <h2>5. Accounts and direct collection</h2>
+      <p>
+        Mathout does not offer a Mathout account, registration, login or profile.
+        It does not send exercise progress to a Mathout account backend.
+        A Google Play account used for a purchase, a RevenueCat App User ID, and advertising
+        identifiers (when ads SDKs run) are separate from a Mathout account.
+      </p>
+      <p>
+        Mathout does not send its local exercise progress to an analytics service in its default
+        configuration. Third-party advertising, consent, purchase and store SDKs may process data
+        as described in their sections when those features are active in the build you use.
+      </p>
     </section>
-    <section id="revenuecat"><h2>6. RevenueCat</h2>
-      <p>When purchase support is configured, Mathout uses RevenueCat to retrieve the ad-free offering, make or restore a purchase, and check the <code>ad_free</code> entitlement. Mathout does not give RevenueCat a custom Mathout account ID. RevenueCat's SDK can create an anonymous App User ID and process that identifier, purchase records, product information and entitlement status to provide this service. This is distinct from your Google Play identity. See <a href="https://www.revenuecat.com/docs/customers/user-ids">RevenueCat's App User ID documentation</a> and <a href="https://www.revenuecat.com/privacy">RevenueCat's Privacy Policy</a>.</p>
+
+    <section id="advertising">
+      <h2>6. Advertising (Google AdMob) — active in the current confirmed AAB</h2>
+      <p>
+        <strong>Owner-confirmed:</strong> the current Android App Bundle distributed by the
+        operator includes Google AdMob <em>banner</em> advertising.
+        Mathout does not use interstitial, rewarded, app-open or native ad placements.
+      </p>
+      <p>
+        A banner request is still gated in code on UMP permitting ad requests and on the app
+        determining that ad-free access is not active. No banner is requested while entitlement
+        state is unknown or ad-free access is confirmed.
+      </p>
+      <p>
+        The Mobile Ads SDK may process information such as IP address, app interactions,
+        diagnostics and device or advertising identifiers to deliver, measure and protect ads,
+        and, where applicable, personalize them according to consent and settings.
+        See <a href="https://developers.google.com/admob/android/privacy/play-data-disclosure">Google’s Mobile Ads data disclosure</a>
+        and <a href="https://policies.google.com/privacy">Google’s Privacy Policy</a>.
+        Google and the publisher commonly act as independent controllers for standard AdMob use
+        (see Google’s AdMob GDPR materials); exact role mapping requires legal confirmation.
+      </p>
     </section>
-    <section id="services"><h2>7. Third-party services</h2>
-      <ul><li><strong>Google Play and Google Play Billing:</strong> app distribution and purchase checkout.</li>
-      <li><strong>Google AdMob / Mobile Ads:</strong> banner advertising when enabled.</li>
-      <li><strong>Google UMP:</strong> consent messages and privacy choices for ads-enabled builds.</li>
-      <li><strong>RevenueCat:</strong> purchase and ad-free entitlement management when configured.</li></ul>
-      <p>These providers process data under their own privacy practices. Their processing, including any data retained on their systems, is separate from Mathout's local exercise progress.</p>
+
+    <section id="consent">
+      <h2>7. Consent and privacy choices (Google UMP)</h2>
+      <p>
+        Mathout asks Google’s User Messaging Platform (UMP) to update consent information when
+        the app starts and shows a consent form if required. Mathout checks whether UMP permits
+        ad requests before requesting a banner. Where UMP requires a privacy-options entry point,
+        you can reopen those choices from Settings → Privacy options. The Privacy Policy link is
+        available in Settings. Choices depend on your region and the messages configured for the app.
+        See <a href="https://developers.google.com/admob/flutter/privacy">Google’s UMP information</a>.
+      </p>
+      <p>
+        <strong>Withdrawing consent:</strong> where advertising processing relies on consent
+        gathered through UMP, you may withdraw or change that consent via the in-app privacy
+        options (when shown) and via Android advertising / privacy controls. Withdrawal does not
+        affect the lawfulness of processing based on consent before withdrawal.
+        UMP choices are <em>not</em> automatically treated here as covering every GDPR legal basis
+        for all processing — that requires legal confirmation.
+      </p>
     </section>
-    <section id="retention"><h2>8. Data retention and your controls</h2>
-      <p>Mathout keeps its local progress, preferences and ad-free status cache on your device until you remove the app's data or uninstall it, subject to Android backup and transfer behavior. The app currently has no in-app progress export or reset feature and no Mathout account to delete. Clearing app data removes local progress and preferences; it may also remove locally cached purchase state, after which “Restore purchases” can ask the purchase services to check ownership again. Removing local data does not itself delete records held by Google or RevenueCat. Their retention and request processes are described in their privacy policies.</p>
-      <p>You can change Mathout preferences in Settings and, where offered, revisit advertising choices there. You can also manage Android advertising ID controls in your device settings.</p>
+
+    <section id="purchases">
+      <h2>8. Google Play Billing — active in the current confirmed AAB</h2>
+      <p>
+        <strong>Owner-confirmed:</strong> Mathout uses Google Play Billing for the optional
+        one-time “Remove Ads Forever” purchase. Google Play handles checkout and payment
+        information. Mathout does not ask for or store your card details. The app reads purchase /
+        entitlement status to decide whether ads may be shown, and offers “Restore purchases”
+        in Settings. Purchase-related metadata may be processed by Google under its privacy policy.
+        See <a href="https://policies.google.com/privacy">Google’s Privacy Policy</a>.
+      </p>
     </section>
-    <section id="children"><h2>9. Children's privacy</h2>
-      <p>Mathout's current app flow does not ask users for their age. Advertising and consent behavior depends on the app's store audience settings and advertising configuration. If you have a question about a child's use of Mathout, contact us using the address below.</p>
+
+    <section id="revenuecat">
+      <h2>9. RevenueCat — active in the current confirmed AAB</h2>
+      <p>
+        <strong>Owner-confirmed:</strong> Mathout uses RevenueCat to retrieve the ad-free
+        offering, make or restore a purchase, and check the <code>ad_free</code> entitlement.
+        Mathout does not give RevenueCat a custom Mathout account ID. RevenueCat’s SDK can create
+        an anonymous App User ID and process that identifier, purchase records, product information
+        and entitlement status. This is distinct from your Google Play identity.
+        See <a href="https://www.revenuecat.com/docs/customers/user-ids">RevenueCat’s App User ID documentation</a>
+        and <a href="https://www.revenuecat.com/privacy">RevenueCat’s Privacy Policy</a>.
+        RevenueCat’s published materials describe processing involving AWS facilities in the
+        United States; transfer safeguards require legal confirmation
+        (<em>[TODO — legal review of DPA / SCCs]</em>).
+      </p>
     </section>
-    <section id="security"><h2>10. Security</h2>
-      <p>Mathout's exercise progress is kept in Android app storage. No storage or network service can be guaranteed completely secure. Google and RevenueCat describe their own safeguards in their privacy information linked above.</p>
+
+    <section id="services">
+      <h2>10. Recipients / categories of third parties</h2>
+      <ul>
+        <li><strong>Google Play / Google Play Billing</strong> — distribution and purchase checkout (owner-confirmed active).</li>
+        <li><strong>Google AdMob / Mobile Ads</strong> — banner advertising (owner-confirmed active in current AAB).</li>
+        <li><strong>Google UMP</strong> — consent messages and privacy choices for advertising.</li>
+        <li><strong>RevenueCat</strong> — purchase and entitlement management (owner-confirmed active).</li>
+      </ul>
+      <p>
+        These providers process data under their own privacy practices. International transfers
+        (including possible processing outside the EEA) may occur depending on the provider.
+        Specific transfer mechanisms and locations beyond what providers publicly document:
+        <em>[TODO — legal confirmation; not invented here]</em>.
+      </p>
     </section>
-    <section id="changes"><h2>11. Changes to this policy</h2><p>We may update this page when Mathout or its third-party services change. The date above shows when this version was last updated.</p></section>
-    <section id="contact"><h2>12. Contact</h2><p>For privacy questions about Mathout, contact <span>mmoa.software@gmail.com</span>.</p></section>
+
+    <section id="retention">
+      <h2>11. Retention criteria</h2>
+      <p>
+        <strong>Local Mathout data:</strong> kept on the device until you clear app data or
+        uninstall (subject to Android backup / transfer). There is currently no in-app progress
+        export or reset and no Mathout account to delete.
+      </p>
+      <p>
+        Clearing app data removes local progress and preferences; it may also remove locally
+        cached purchase state, after which “Restore purchases” can ask purchase services to check
+        ownership again. Removing local data does not itself delete records held by Google or
+        RevenueCat.
+      </p>
+      <p>
+        <strong>Fixed retention periods (days/months):</strong>
+        <em>[TODO — not invented; add only after legal confirmation]</em>.
+        Third-party retention follows their policies linked above.
+      </p>
+    </section>
+
+    <section id="rights">
+      <h2>12. Your rights</h2>
+      <p>
+        Depending on applicable law (including the GDPR where it applies), you may have rights to
+        access, rectification, erasure, restriction of processing, data portability, objection,
+        and to withdraw consent where processing is based on consent.
+      </p>
+      <p>
+        To exercise rights against the Mathout controller, contact
+        <span>mmoa.software@gmail.com</span>.
+        For data held only by Google or RevenueCat, you may also need to use their own request channels.
+      </p>
+      <p>
+        Exact procedures and identity verification steps:
+        <em>[TODO — confirm after legal review]</em>.
+      </p>
+    </section>
+
+    <section id="complaint">
+      <h2>13. Right to lodge a complaint (ÚOOÚ)</h2>
+      <p>
+        You have the right to lodge a complaint with a supervisory authority.
+        For the Czech Republic, the Office for Personal Data Protection (Úřad pro ochranu
+        osobních údajů, ÚOOÚ) is the typical authority:
+        <a href="https://uoou.gov.cz/">https://uoou.gov.cz/</a>.
+        You may also contact the authority in your place of residence or work, where applicable.
+      </p>
+    </section>
+
+    <section id="children">
+      <h2>14. Children’s privacy</h2>
+      <p>
+        Mathout’s current app flow does not ask users for their age. Advertising and consent
+        behaviour (when ads are enabled) depends on store audience settings and advertising
+        configuration. Questions about a child’s use of Mathout: use the contact e-mail below.
+      </p>
+    </section>
+
+    <section id="security">
+      <h2>15. Security</h2>
+      <p>
+        Mathout’s exercise progress is kept in Android app storage. No storage or network service
+        can be guaranteed completely secure. Google and RevenueCat describe their own safeguards
+        in the privacy information linked above.
+      </p>
+    </section>
+
+    <section id="changes">
+      <h2>16. Changes to this policy</h2>
+      <p>We may update this page when Mathout or its third-party services change. The date above shows when this version was last updated.</p>
+    </section>
+
+    <section id="contact">
+      <h2>17. Contact</h2>
+      <p>For privacy questions about Mathout, contact <span>mmoa.software@gmail.com</span>.</p>
+    </section>
+
+    <section id="todo">
+      <h2>18. Owner TODOs before treating this as final</h2>
+      <ul>
+        <li>confirm and publish the natural person’s legal name as controller;</li>
+        <li>confirm whether a postal address must appear;</li>
+        <li>confirm GDPR Article 6 legal bases;</li>
+        <li>confirm processing locations / transfer wording for Google and RevenueCat;</li>
+        <li>confirm any fixed retention periods required by law;</li>
+        <li>align Google Play developer name with the controller / brand wording;</li>
+        <li>align Play Data safety declarations with this policy and the actual release SDK flags.</li>
+      </ul>
+    </section>
   </main>
   <footer><div class="wrap">© MMOA · <a href="../../">Home</a></div></footer>
 </body>

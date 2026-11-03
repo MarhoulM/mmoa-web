@@ -1,0 +1,5 @@
+# Local-only staging override (may contain project URL + publishable key)
+sestava/assets/config.local.js
+
+# Deterministic allowlist publish artifact (built by scripts/prepare-publish.*)
+.publish/

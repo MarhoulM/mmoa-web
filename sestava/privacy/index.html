@@ -1,0 +1,326 @@
+<!doctype html>
+<html lang="cs">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Návrh zásad ochrany osobních údajů aplikace Sestava (DRAFT).">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Soukromí · Sestava (DRAFT)</title>
+  <link rel="stylesheet" href="../assets/sestava.css">
+</head>
+<body class="sestava">
+  <header class="site-header">
+    <div class="wrap">
+      <a class="brand" href="../">Sestava</a>
+      <nav class="nav-links" aria-label="Sestava">
+        <a href="../support/">Podpora</a>
+        <a href="../delete-account/">Smazat účet</a>
+        <a href="../../">MMOA</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <p class="banner banner--warn" role="status">
+      <strong>DRAFT</strong> — dokument není finální. Čeká na potvrzení identity správce
+      (fyzická osoba) a právní kontrolu. Do té doby není určen k veřejnému zveřejnění
+      jako platné zásady. Produkční backend Sestavy je vypnutý.
+    </p>
+
+    <p class="eyebrow">Sestava</p>
+    <h1>Zásady ochrany osobních údajů <span class="draft-badge">DRAFT</span></h1>
+    <p class="muted">
+      Návrh aktualizován: 3. listopadu 2026 · vychází z implementace a z potvrzeného plánu MVP
+      (Resend, FCM, webové mazání účtu). Produkční prostředí zůstává DISABLED.
+    </p>
+
+    <nav class="toc" aria-label="Obsah">
+      <strong>Na této stránce</strong>
+      <ul>
+        <li><a href="#controller">Správce a kontakt</a></li>
+        <li><a href="#scope">Rozsah</a></li>
+        <li><a href="#data">Kategorie údajů</a></li>
+        <li><a href="#purposes">Účely</a></li>
+        <li><a href="#legal">Právní základy</a></li>
+        <li><a href="#processors">Příjemci a zpracovatelé</a></li>
+        <li><a href="#invites">Pozvánky e-mailem</a></li>
+        <li><a href="#push">Push notifikace</a></li>
+        <li><a href="#retention">Uchovávání</a></li>
+        <li><a href="#deletion">Smazání účtu</a></li>
+        <li><a href="#rights">Práva subjektů</a></li>
+        <li><a href="#complaint">Stížnost (ÚOOÚ)</a></li>
+        <li><a href="#contact">Kontakt</a></li>
+        <li><a href="#missing">Údaje k doplnění (TODO)</a></li>
+      </ul>
+    </nav>
+
+    <section id="controller">
+      <h2>1. Správce a kontakt</h2>
+      <p>
+        <strong>Správce (fyzická osoba):</strong>
+        <code>[PRÁVNÍ JMÉNO FYZICKÉ OSOBY — TO BE CONFIRMED]</code>.
+        Správce je fyzická osoba bez živnosti / bez IČO.
+      </p>
+      <p>
+        <strong>Značka:</strong> „MMOA Software“ / „MMOA“ je pouze marketingové označení
+        (budoucí softwarové studio). <em>Není</em> právnická osoba a nesmí sama o sobě
+        nahrazovat totožnost správce.
+      </p>
+      <p>
+        <strong>Kontaktní e-mail:</strong>
+        <span>mmoa.software@gmail.com</span>
+        (potvrzený kontaktní kanál z webu MMOA; před finální publikací znovu potvrdit
+        jako oficiální privacy kontakt).
+      </p>
+      <p>
+        Adresa / další identifikátory:
+        <em>[TODO — nevymýšlet; doplnit jen po právní kontrole, pokud jsou potřeba]</em>.
+      </p>
+    </section>
+
+    <section id="scope">
+      <h2>2. Rozsah</h2>
+      <p>
+        Tyto zásady se týkají mobilní aplikace <strong>Sestava</strong> a související webové
+        samoobsluhy smazání účtu. Popisují zpracování podle implementace a podle
+        <strong>plánovaného produkčního MVP</strong>, ve kterém provozovatel potvrdil:
+        Supabase Auth, e-mailové pozvánky přes Resend, push přes FCM a webové mazání účtu.
+        Tato dokumentace <em>neprohlašuje</em>, že produkční prostředí je již zapnuté —
+        produkce zůstává DISABLED, dokud nebude výslovně schválena a aktivována.
+      </p>
+    </section>
+
+    <section id="data">
+      <h2>3. Kategorie zpracovávaných údajů</h2>
+      <p>Podle implementace mohou být zpracovávány zejména:</p>
+      <ul>
+        <li>
+          <strong>Účet (Supabase Auth):</strong> e-mail, identifikátor uživatele, údaje o
+          přihlášení a relaci — osobní údaje.
+        </li>
+        <li>
+          <strong>Profil:</strong> zobrazované jméno — osobní údaj.
+        </li>
+        <li>
+          <strong>Týmy a členství:</strong> vazba uživatele na člena týmu, role v obdobích
+          členství, zobrazované jméno v soupisce — osobní / vázané na účet.
+        </li>
+        <li>
+          <strong>Události, účast, nominace:</strong> stavy účasti a nominací vázané na člena;
+          po smazání účtu mohou zůstat záznamy s odpojeným uživatelem a obecným jménem
+          „Bývalý člen“ — jde o <em>pseudonymizaci / provozní historii</em>, nikoli automaticky
+          o úplnou anonymizaci.
+        </li>
+        <li>
+          <strong>Pozvánky:</strong> e-mail pozvaného, stav pozvánky, případně kdo přijal —
+          osobní údaje.
+        </li>
+        <li>
+          <strong>Push:</strong> token zařízení, platforma, vazba na účet — osobní /
+          identifikátor zařízení (pokud jsou notifikace v daném prostředí aktivní).
+        </li>
+        <li>
+          <strong>Fronta notifikací:</strong> provozní metadata doručení (druh události, stav),
+          případně payload — provozní údaje; u aktivních účtů vázané na příjemce.
+        </li>
+        <li>
+          <strong>Pokusy o odeslání e-mailu pozvánky:</strong> provozní záznamy doručení
+          (pokud je e-mailové doručení v prostředí zapnuté).
+        </li>
+        <li>
+          <strong>Logo týmu:</strong> cesta k souboru v úložišti; při zrušení týmu / přípravě
+          mazání se cesta v databázi vynuluje; fyzické objekty v úložišti se v aktuální
+          Edge funkci <em>nemažou</em> (odložený úklid) — viz smazání účtu.
+        </li>
+        <li>
+          <strong>Požadavky na smazání účtu:</strong> stav procesu mazání (provozní metadata).
+        </li>
+      </ul>
+    </section>
+
+    <section id="purposes">
+      <h2>4. Účely zpracování</h2>
+      <ul>
+        <li>vytvoření a správa uživatelského účtu (Supabase Auth),</li>
+        <li>provoz týmů, událostí, účasti a rolí,</li>
+        <li>doručování pozvánek do týmu e-mailem (plánované MVP: Resend),</li>
+        <li>volitelné push notifikace (plánované MVP: FCM),</li>
+        <li>bezpečnost, prevence zneužití, diagnostika provozu,</li>
+        <li>vyřízení žádosti o smazání účtu (aplikace + plánované veřejné webové mazání).</li>
+      </ul>
+    </section>
+
+    <section id="legal">
+      <h2>5. Právní základy</h2>
+      <p class="banner banner--warn" style="margin:0">
+        <strong>Vyžaduje právní potvrzení (TODO).</strong>
+        Konkrétní právní základy podle GDPR čl. 6 (např. plnění smlouvy, oprávněný zájem,
+        souhlas) zde <em>nejsou uvedeny</em>, dokud je nepotvrdí správce / právní poradce.
+        Nevymýšlíme je.
+      </p>
+    </section>
+
+    <section id="processors">
+      <h2>6. Příjemci a zpracovatelé</h2>
+      <ul>
+        <li>
+          <strong>Supabase</strong> — autentizace, databáze, Edge funkce a Object Storage
+          plánované pro produkční MVP. Podrobnosti stanoví dokumentace poskytovatele.
+          Region projektu / mechanismus předání mimo EHP:
+          <em>[TODO — potvrdit podle produkčního projektu; nevymýšlet]</em>.
+        </li>
+        <li>
+          <strong>Resend</strong> — plánovaný poskytovatel doručení e-mailových pozvánek
+          v produkčním MVP (provozovatel potvrdil). Veřejná dokumentace Resend uvádí uložení
+          zákaznických dat v USA; odesílací region ≠ úložiště.
+          DPA / převody: <em>[TODO — právní potvrzení]</em>.
+          Stav dnes: produkce DISABLED; staging/local mohou mít doručování vypnuté.
+        </li>
+        <li>
+          <strong>Firebase Cloud Messaging (FCM)</strong> — plánované doručení push
+          v produkčním MVP (provozovatel potvrdil). Klient registruje tokeny; Edge worker
+          odesílá. FCM běží na globální infrastruktuře Google —
+          <em>[TODO — právní posouzení předání]</em>.
+          Stav dnes: produkce DISABLED; výchozí build flagy mohou mít push vypnutý.
+        </li>
+      </ul>
+      <p>
+        Monetizace (reklamy / IAP) v Sestavě není plánována.
+      </p>
+    </section>
+
+    <section id="invites">
+      <h2>7. E-mailové pozvánky (plánované MVP: Resend)</h2>
+      <p>
+        V plánovaném produkčním MVP systém odešle e-mail s odkazem nebo tokenem
+        na adresu zadanou pozývajícím uživatelem prostřednictvím Resend (pokud bude
+        doručování v daném prostředí zapnuté). Adresa a stav pozvánky se ukládají
+        v databázi; provozní pokusy o odeslání se mohou logovat.
+        E-mail může obsahovat osobní údaje (adresa příjemce, kontext týmu).
+        Při smazání účtu se nevyřízené pozvánky na e-mail mazaného uživatele
+        zneplatní a e-mail se nahradí technickou hodnotou bez původní adresy.
+      </p>
+      <p>
+        Toto <em>není</em> tvrzení, že Resend již běží v produkci.
+      </p>
+    </section>
+
+    <section id="push">
+      <h2>8. Push notifikace (plánované MVP: FCM)</h2>
+      <p>
+        V plánovaném produkčním MVP, pokud uživatel notifikace povolí (oprávnění systému
+        a nastavení aplikace), ukládají se tokeny zařízení vázané na účet a doručení probíhá
+        přes FCM. Oprávnění k notifikacím <em>není</em> automaticky totéž jako GDPR souhlas
+        ke všem účelům — právní základy vyžadují potvrzení.
+        Při přípravě smazání účtu se tokeny mazaného uživatele odstraňují.
+      </p>
+      <p>
+        Toto <em>není</em> tvrzení, že FCM již běží v produkci.
+      </p>
+    </section>
+
+    <section id="retention">
+      <h2>9. Uchovávání — kritéria (bez vymyšlených lhůt)</h2>
+      <p>
+        Údaje aktivního účtu se uchovávají po dobu existence účtu a souvisejících
+        členství / provozních potřeb týmu. Konkrétní zákonné lhůty ve dnech/měsících
+        zde <strong>nejsou stanoveny</strong> —
+        <em>[TODO — doplní správce po právní kontrole]</em>.
+      </p>
+      <p>
+        Po smazání účtu zůstávají některé historické záznamy (např. účast) bez vazby
+        na Auth identitu a s obecným zobrazovaným jménem. To slouží k zachování
+        smysluplné historie týmu; <strong>nejde o tvrzení o absolutní anonymitě</strong>
+        (omezení „anonymizace“).
+      </p>
+    </section>
+
+    <section id="deletion">
+      <h2>10. Smazání účtu</h2>
+      <p>
+        Účet lze smazat v mobilní aplikaci Sestava (Profil → Smazat účet) nebo
+        na webové stránce smazání účtu (až bude veřejně dostupná a správně nakonfigurovaná;
+        veřejný web je aktuálně fail-closed / bez produkční aktivace).
+      </p>
+      <p>Proces v implementaci zahrnuje:</p>
+      <ol>
+        <li>kontrolu vlastnictví týmů (předání vlastnictví nebo zrušení týmu s jediným vlastníkem),</li>
+        <li>opětovné ověření hesla (čerstvé přihlášení),</li>
+        <li>výslovné potvrzení,</li>
+        <li>volání Edge funkce <code>delete-account</code>,</li>
+        <li>přípravu dat v databázi (odpojení uživatele, úprava jmen, čištění pozvánek/push),</li>
+        <li>smazání Auth identity,</li>
+        <li>dokončení požadavku a odhlášení klienta.</li>
+      </ol>
+      <p><strong>Co se stane s údaji:</strong></p>
+      <ul>
+        <li>Auth účet (přihlášení) je smazán — původní přihlášení přestane fungovat.</li>
+        <li>Osobní vazby (<code>user_id</code>) u členů se odstraňují; zobrazované jméno se nahradí obecným textem („Bývalý člen“ / u profilu „Bývalý účet“).</li>
+        <li>Historie účasti/nominací může zůstat jako provozní záznam týmu bez aktivního účtu (pseudonymizace, ne nutně anonymita).</li>
+        <li>Push tokeny mazaného uživatele se maží; nevyřízené položky fronty notifikací se čistí / payload se vyprazdňuje.</li>
+        <li>
+          Cesty k logům týmů se v DB při dissolve/prepare nulují;
+          <strong>soubory ve Storage se v aktuální Edge funkci nemažou</strong>
+          (odložený úklid orphan objektů — publikační riziko / TODO provozní politiky).
+        </li>
+      </ul>
+    </section>
+
+    <section id="rights">
+      <h2>11. Práva subjektů údajů</h2>
+      <p>
+        Podle GDPR a použitelných předpisů můžete mít práva na přístup, opravu, výmaz,
+        omezení zpracování, přenositelnost, námitku a odvolání souhlasu (pokud je základem
+        souhlas). Odvolání souhlasu neovlivní zákonnost zpracování před odvoláním.
+      </p>
+      <p>
+        Pro uplatnění práv vůči správci Sestavy použijte kontakt níže.
+        Přesný postup ověření identity:
+        <em>[TODO — po právní kontrole]</em>.
+      </p>
+    </section>
+
+    <section id="complaint">
+      <h2>12. Stížnost u ÚOOÚ</h2>
+      <p>
+        Máte právo podat stížnost u dozorového úřadu. Pro Českou republiku je tímto úřadem
+        Úřad pro ochranu osobních údajů (ÚOOÚ):
+        <a href="https://uoou.gov.cz/">https://uoou.gov.cz/</a>.
+        Můžete se obrátit i na úřad v místě svého bydliště nebo pracoviště, pokud to právo
+        umožňuje.
+      </p>
+    </section>
+
+    <section id="contact">
+      <h2>13. Kontakt</h2>
+      <p>
+        Dotazy k ochraně osobních údajů Sestavy:
+        <span>mmoa.software@gmail.com</span>.
+      </p>
+    </section>
+
+    <section id="missing">
+      <h2>14. Údaje, které musí provozovatel doplnit (TODO)</h2>
+      <ul>
+        <li>právní jméno fyzické osoby jako správce,</li>
+        <li>adresa, pokud je po právní kontrole vyžadována (IČO se neuvádí — neexistuje),</li>
+        <li>potvrzení e-mailu jako oficiálního privacy kontaktu,</li>
+        <li>právní základy zpracování (čl. 6 GDPR),</li>
+        <li>region / předání u Supabase a dalších zpracovatelů,</li>
+        <li>produkční stav Resend / FCM (zapnuto vs vypnuto),</li>
+        <li>retenční lhůty vyžadované právem (pokud nějaké),</li>
+        <li>politika úklidu orphan souborů ve Storage,</li>
+        <li>finální veřejné URL Privacy Policy a delete-account (bez DRAFT/noindex),</li>
+        <li>shoda Google Play developer name a Data Safety.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <div class="wrap">
+      <span>© · Sestava (DRAFT)</span>
+      <a href="../">Zpět na Sestavu</a>
+    </div>
+  </footer>
+</body>
+</html>
