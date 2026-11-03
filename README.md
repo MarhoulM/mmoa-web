@@ -1,32 +1,20 @@
 # mmoa-web
 
-Static site for **MMOA** (brand / future studio label — not a legal entity by itself):
+Public static site for **MMOA** (brand / studio label — not a legal entity by itself).
 
-- Studio home (`index.html`)
-- MathOut Privacy Policy (`mathout/privacy/`)
-- Sestava section (`sestava/`) — landing, privacy (DRAFT), support, account deletion
+## Pages
+
+- Studio home — `/`
+- MathOut Privacy Policy — `/mathout/privacy/`
+- Sestava landing — `/sestava/`
+- Sestava Privacy Policy — `/sestava/privacy/`
+- Sestava Support — `/sestava/support/`
+- Sestava Account Deletion — `/sestava/delete-account/`
+
+Hosted via GitHub Pages (Actions allowlist artifact). Sestava account deletion stays disabled in the public browser config until separately enabled.
 
 ## Local preview
 
 ```powershell
 npx --yes serve -l 5500
 ```
-
-## Publish artifact
-
-Allowlist-only build (no docs, no mocks):
-
-```powershell
-node scripts/prepare-publish.mjs
-```
-
-Output: `.publish/` (gitignored). Workflow: `.github/workflows/pages-from-artifact.yml`
-(`workflow_dispatch` only + explicit `PUBLISH` input — not auto-publish on push).
-
-Operator reports Pages source set to GitHub Actions. That is an operational
-assumption: confirm in repository Settings before treating a push as safe for
-docs isolation. A branch-root Pages source would still expose the full tree.
-
-## Privacy
-
-Controller legal name and Article 6 bases remain TODO in both policies. Sestava privacy stays DRAFT + `noindex`. Account deletion stays fail-closed in public `config.js`.
