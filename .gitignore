@@ -3,3 +3,7 @@ sestava/assets/config.local.js
 
 # Deterministic allowlist publish artifact (built by scripts/prepare-publish.*)
 .publish/
+
+# Flutter web demo artifact (synced from Sestava build/web; ~45MB)
+demo/
+!demo/README.md

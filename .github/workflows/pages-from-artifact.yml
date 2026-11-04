@@ -1,15 +1,18 @@
-# PROPOSAL ONLY — not activated for automatic publish.
+# Publishes the allowlist artifact (static site + Flutter demo) to GitHub Pages.
 #
-# Publishes the allowlist artifact built by scripts/prepare-publish.mjs
-# to GitHub Pages via Actions artifact upload.
-#
-# Safety:
+# Safety (unchanged):
 # - Trigger is workflow_dispatch ONLY (no push / no schedule).
-# - Job requires GitHub Environment "publication-approval"
-#   (configure required reviewers before first use).
+# - Operator must type PUBLISH.
+# - Deploy job requires GitHub Environment "publication-approval".
 # - Do NOT add "on: push" without explicit human approval.
 #
-# Creating .publish/ locally does NOT change Pages by itself.
+# Demo build:
+# - Built in CI from a pinned Sestava commit SHA (never "latest main").
+# - demo/ is not committed to this repo.
+# - Private Sestava/Baser access uses repository secret SESTAVA_READ_TOKEN
+#   (fine-grained PAT or equivalent with Contents: Read on those repos).
+#   Do not put tokens in this file.
+#
 # Repository Settings → Pages must use "GitHub Actions" as source
 # for this workflow to take effect (separate manual change).
 
@@ -22,6 +25,22 @@ on:
         description: 'Type PUBLISH to confirm intentional deploy'
         required: true
         type: string
+      sestava_repository:
+        description: 'GitHub owner/name of the Sestava source repo'
+        required: true
+        type: string
+        default: 'MarhoulM/Sestava'
+      sestava_sha:
+        description: 'Full 40-char commit SHA of Sestava to build (not a branch name)'
+        required: true
+        type: string
+      demo_base_href:
+        description: 'Flutter --base-href. Use /demo/ for user/org root Pages, /mmoa-web/demo/ for project Pages. Must end with /demo/.'
+        required: true
+        type: choice
+        options:
+          - /demo/
+          - /mmoa-web/demo/
 
 permissions:
   contents: read
@@ -39,8 +58,122 @@ jobs:
     # Gate: refuse unless the operator typed PUBLISH
     if: ${{ github.event.inputs.confirm == 'PUBLISH' }}
     steps:
-      - name: Checkout
+      - name: Validate publish inputs
+        env:
+          SESTAVA_SHA: ${{ github.event.inputs.sestava_sha }}
+          DEMO_BASE_HREF: ${{ github.event.inputs.demo_base_href }}
+          SESTAVA_REPOSITORY: ${{ github.event.inputs.sestava_repository }}
+        run: |
+          set -euo pipefail
+          if [[ ! "$SESTAVA_SHA" =~ ^[0-9a-fA-F]{40}$ ]]; then
+            echo "sestava_sha must be a full 40-character commit SHA (got: $SESTAVA_SHA)"
+            exit 1
+          fi
+          if [[ ! "$SESTAVA_REPOSITORY" =~ ^[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+$ ]]; then
+            echo "sestava_repository must look like owner/name"
+            exit 1
+          fi
+          if [[ ! "$DEMO_BASE_HREF" =~ ^/.+/demo/$ ]] && [[ "$DEMO_BASE_HREF" != "/demo/" ]]; then
+            echo "demo_base_href must be /demo/ or end with /demo/ (got: $DEMO_BASE_HREF)"
+            exit 1
+          fi
+          echo "Pinned Sestava: $SESTAVA_REPOSITORY@$SESTAVA_SHA"
+          echo "Demo base-href: $DEMO_BASE_HREF"
+
+      - name: Checkout mmoa-web
         uses: actions/checkout@v4
+
+      - name: Require Sestava read token for private sources
+        env:
+          SESTAVA_READ_TOKEN: ${{ secrets.SESTAVA_READ_TOKEN }}
+        run: |
+          set -euo pipefail
+          if [ -z "${SESTAVA_READ_TOKEN:-}" ]; then
+            echo "Missing repository secret SESTAVA_READ_TOKEN."
+            echo "Create a fine-grained PAT (Contents: Read) for the Sestava repo"
+            echo "and its Baser submodule repo, then add it as SESTAVA_READ_TOKEN."
+            echo "Do not commit the token. Public-only clones are not assumed."
+            exit 1
+          fi
+
+      - name: Checkout Sestava at pinned SHA
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ github.event.inputs.sestava_repository }}
+          ref: ${{ github.event.inputs.sestava_sha }}
+          token: ${{ secrets.SESTAVA_READ_TOKEN }}
+          path: _sestava
+          submodules: recursive
+
+      - name: Verify checked-out Sestava SHA
+        working-directory: _sestava
+        env:
+          EXPECTED_SHA: ${{ github.event.inputs.sestava_sha }}
+        run: |
+          set -euo pipefail
+          ACTUAL="$(git rev-parse HEAD)"
+          echo "Expected: $EXPECTED_SHA"
+          echo "Actual:   $ACTUAL"
+          if [ "$ACTUAL" != "$EXPECTED_SHA" ]; then
+            echo "Checked-out commit does not match sestava_sha"
+            exit 1
+          fi
+
+      - name: Read pinned Flutter SDK version
+        id: flutter_pin
+        run: |
+          set -euo pipefail
+          VER="$(tr -d '[:space:]' < .github/flutter-sdk-version)"
+          if [[ ! "$VER" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "Invalid Flutter pin in .github/flutter-sdk-version: $VER"
+            exit 1
+          fi
+          echo "version=$VER" >> "$GITHUB_OUTPUT"
+          echo "Using Flutter SDK $VER"
+
+      - name: Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: ${{ steps.flutter_pin.outputs.version }}
+          channel: stable
+          cache: true
+
+      - name: Flutter pub get
+        working-directory: _sestava
+        run: flutter pub get
+
+      - name: Build Flutter web demo
+        working-directory: _sestava
+        env:
+          DEMO_BASE_HREF: ${{ github.event.inputs.demo_base_href }}
+        run: |
+          set -euo pipefail
+          flutter build web \
+            --release \
+            --base-href="$DEMO_BASE_HREF" \
+            --dart-define=APP_ENV=demo \
+            --dart-define=FIREBASE_ENABLED=false \
+            --dart-define=INVITE_EMAIL_DELIVERY=disabled
+          cp -f build/web/index.html build/web/404.html
+
+      - name: Security scan demo artifact
+        run: node _sestava/tool/scan_demo_web_security.mjs _sestava/build/web
+
+      - name: Stage demo/ for allowlist packaging
+        run: |
+          set -euo pipefail
+          rm -rf demo
+          mkdir -p demo
+          cp -a _sestava/build/web/. demo/
+          # Keep tracked README if present in git; otherwise write a stub stamp.
+          {
+            echo "CI-built demo — not committed to git"
+            echo "sestava_repository=${{ github.event.inputs.sestava_repository }}"
+            echo "sestava_sha=${{ github.event.inputs.sestava_sha }}"
+            echo "demo_base_href=${{ github.event.inputs.demo_base_href }}"
+            echo "flutter_sdk=${{ steps.flutter_pin.outputs.version }}"
+            echo "built_at_utc=$(date -u +%Y-%m-%dT%H:%M:%SZ)"
+          } > demo/DEMO_BUILD_STAMP.txt
 
       - name: Setup Node
         uses: actions/setup-node@v4

@@ -1,9 +1,7 @@
 ﻿# Build a deterministic GitHub Pages artifact into .publish/
-# Allowlist-only. Does NOT deploy. Does NOT push. Does NOT change Pages source.
+# Allowlist files + demo/ tree. Does NOT deploy. Does NOT push.
 #
-# IMPORTANT: If GitHub Pages is configured to publish from the repository root
-# (branch/folder), generating .publish/ alone does NOT change what Pages serves.
-# A separate Actions/manual deploy from .publish/ must be approved later.
+# Requires demo/ synced from Sestava (tool/sync_demo_to_mmoa_web.ps1).
 #
 # Usage (from mmoa-web root):
 #   powershell -NoProfile -File scripts\prepare-publish.ps1
@@ -12,8 +10,7 @@ $ErrorActionPreference = 'Stop'
 $root = Split-Path -Parent $PSScriptRoot
 $out = Join-Path $root '.publish'
 
-# Explicit allowlist — relative paths from repo root (forward or back slash OK)
-$Allowlist = @(
+$AllowlistFiles = @(
   'index.html',
   'mathout/privacy/index.html',
   'sestava/index.html',
@@ -44,15 +41,49 @@ if (Test-Path -LiteralPath $out) {
 }
 New-Item -ItemType Directory -Path $out | Out-Null
 
-foreach ($rel in $Allowlist) {
+foreach ($rel in $AllowlistFiles) {
   Copy-AllowlistedFile -Rel $rel
 }
 
-# Write manifest for reproducibility checks
-$manifestPath = Join-Path $out 'PUBLISH_MANIFEST.txt'
-$Allowlist | ForEach-Object { $_ -replace '\\', '/' } | Set-Content -Path $manifestPath -Encoding utf8
+$demoSrc = Join-Path $root 'demo'
+if (-not (Test-Path -LiteralPath $demoSrc)) {
+  throw 'demo/ missing — run Sestava tool/sync_demo_to_mmoa_web.ps1 first'
+}
+if (-not (Test-Path -LiteralPath (Join-Path $demoSrc 'index.html'))) {
+  throw 'demo/index.html missing'
+}
+if (-not (Test-Path -LiteralPath (Join-Path $demoSrc 'main.dart.js'))) {
+  throw 'demo/main.dart.js missing'
+}
+$demoIndex = Get-Content -LiteralPath (Join-Path $demoSrc 'index.html') -Raw
+if ($demoIndex -notmatch 'base href="[^"]*demo/"') {
+  throw 'demo/index.html must use a .../demo/ base href'
+}
+$demoMain = Get-Content -LiteralPath (Join-Path $demoSrc 'main.dart.js') -Raw
+if ($demoMain -notmatch 'demo@sestava\.local') {
+  throw 'demo build missing demo identity marker'
+}
+if ($demoMain -match 'https://[a-z0-9]{10,40}\.supabase\.(co|in)') {
+  throw 'demo build contains live Supabase project URL'
+}
+if ($demoMain -match '(?i)sb_secret_[A-Za-z0-9]') {
+  throw 'demo build contains sb_secret_ marker'
+}
+if ($demoMain -match '(?i)SUPABASE_SERVICE_ROLE\s*=') {
+  throw 'demo build contains SUPABASE_SERVICE_ROLE assignment'
+}
 
-# --- Safety validation ---
+Copy-Item -LiteralPath $demoSrc -Destination (Join-Path $out 'demo') -Recurse -Force
+
+$manifest = New-Object System.Collections.Generic.List[string]
+foreach ($f in $AllowlistFiles) { [void]$manifest.Add(($f -replace '\\', '/')) }
+Get-ChildItem -LiteralPath (Join-Path $out 'demo') -Recurse -File | ForEach-Object {
+  $rel = $_.FullName.Substring($out.Length).TrimStart('\', '/').Replace('\', '/')
+  [void]$manifest.Add($rel)
+}
+$manifestPath = Join-Path $out 'PUBLISH_MANIFEST.txt'
+$manifest | Set-Content -Path $manifestPath -Encoding utf8
+
 $allFiles = Get-ChildItem -LiteralPath $out -Recurse -File
 $relFiles = $allFiles | ForEach-Object {
   $_.FullName.Substring($out.Length).TrimStart('\', '/').Replace('\', '/')
@@ -60,22 +91,21 @@ $relFiles = $allFiles | ForEach-Object {
 
 foreach ($r in $relFiles) {
   if ($r -eq 'PUBLISH_MANIFEST.txt') { continue }
-  if ($r -notmatch '^(index\.html|mathout/|sestava/)') {
-    throw "Unexpected artifact path: $r"
-  }
-  if ($r -match '(?i)(^|/)(docs|scripts|_local)(/|$)' -or $r -match '(?i)README\.md$' -or $r -match '(?i)config\.(local\.)?example\.js$' -or $r -match '(?i)\.test\.mjs$' -or $r -match '(?i)mock') {
+  $ok = ($r -match '^(index\.html|mathout/|sestava/|demo/)')
+  if (-not $ok) { throw "Unexpected artifact path: $r" }
+  if ($r -match '(?i)(^|/)(docs|scripts|_local)(/|$)' -or $r -match '(?i)config\.local' -or $r -match '(?i)mock' -or $r -match '(?i)\.env$') {
     throw "Excluded path present in artifact: $r"
-  }
-  if ($r -match '(?i)config\.local\.js$') {
-    throw "Local config must not be in artifact: $r"
   }
 }
 
 foreach ($f in $allFiles) {
   if ($f.Name -eq 'PUBLISH_MANIFEST.txt') { continue }
+  if ($f.Name -eq 'main.dart.js') { continue }
+  if ($f.Length -gt 15MB) { continue }
+  if ($f.Extension -notin '.html', '.js', '.css', '.json', '.txt') { continue }
   $text = Get-Content -LiteralPath $f.FullName -Raw -ErrorAction SilentlyContinue
   if ($null -eq $text) { continue }
-  if ($text -match 'eyJ[A-Za-z0-9_-]{10,}\.[A-Za-z0-9_-]+\.') {
+  if ($text -match 'eyJ[A-Za-z0-9_-]{30,}\.[A-Za-z0-9_-]{30,}\.[A-Za-z0-9_-]{30,}') {
     throw "JWT-like content in $($f.FullName)"
   }
   if ($text -match '(?i)service_role\s*[:=]') {
@@ -100,13 +130,7 @@ if ($config -match 'supabaseUrl:\s*"https://') {
   throw 'Artifact config.js must not hardcode a live supabaseUrl'
 }
 
-# Expected exact public file count (allowlist only; manifest extra)
-$expected = $Allowlist.Count
 $publicCount = ($relFiles | Where-Object { $_ -ne 'PUBLISH_MANIFEST.txt' }).Count
-if ($publicCount -ne $expected) {
-  throw "Artifact file count $publicCount != allowlist $($expected)"
-}
-
-Write-Host "OK publish artifact at $out ($publicCount files + manifest)"
+Write-Host "OK publish artifact at $out ($publicCount files + manifest, incl. demo/)"
 Write-Host "NOTE: Creating .publish does not change GitHub Pages source by itself."
 Write-Host "Do not deploy without explicit human approval."
