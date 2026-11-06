@@ -80,14 +80,16 @@
 <ul>
 <li>e-mailová adresa</li>
 <li>heslo (uložené u poskytovatele autentizace v hashed podobě)</li>
+<li>zobrazované jméno (povinné při registraci)</li>
 <li>interní identifikátor účtu (UUID)</li>
 </ul>
 <h3>Profil a týmy</h3>
 <ul>
-<li>zobrazované jméno profilu (výchozí odvozené z části e-mailu před registrací)</li>
-<li>jméno v soupisce týmu, členství a role</li>
+<li>zobrazované jméno profilu (při registraci zadané uživatelem; u starších účtů může být výchozí odvozené z části e-mailu)</li>
+<li>jméno v soupisce týmu, členství a role (organizátor může nastavit týmovou přezdívku odděleně od globálního jména)</li>
 <li>volitelně: pozice, číslo dresu</li>
 <li>volitelně: <strong>skupina pro kapacitní kvóty</strong> událostí (`muži` / `ženy` / `neurčeno`) — slouží k organizaci kapacity, nikoli k marketingovému profilování</li>
+<li>volitelná profilová fotografie (avatar)</li>
 </ul>
 <h3>Události a účast</h3>
 <ul>
@@ -107,6 +109,7 @@
 <h3>Soubory</h3>
 <ul>
 <li>volitelná týmová loga nahraná oprávněnými členy týmu</li>
+<li>volitelné profilové fotografie nahrané uživatelem (uložené v privátním úložišti)</li>
 </ul>
 <p><strong>Nezpracováváme:</strong> rodná čísla, platební údaje, přesnou polohu zařízení, reklamní identifikátory. V aktuální konfiguraci <strong>nepoužíváme</strong> reklamní sítě ani analytické služby třetích stran nad rámec níže uvedených provozních poskytovatelů.</p>
 <h2>3. Účely zpracování</h2>
@@ -128,7 +131,7 @@
 <li><strong>Firebase Hosting</strong> — veřejné stránky odkazů pozvánek / join (bez databáze účtů)</li>
 <li><strong>Resend</strong> — odesílání e-mailových pozvánek (pokud je funkce v prostředí zapnutá)</li>
 </ul>
-<p>Region cloudového projektu a převody mimo EHP: <strong>TODO — ověřit v konzoli poskytovatele</strong>. Členové stejného týmu mohou v Aplikaci vidět údaje nezbytné pro provoz týmu (jméno v týmu, účast, nominace).</p>
+<p>Region cloudového projektu a převody mimo EHP: <strong>TODO — ověřit v konzoli poskytovatele</strong>. Členové stejného týmu mohou v Aplikaci vidět údaje nezbytné pro provoz týmu (jméno v týmu, globální zobrazované jméno a profilovou fotografii oprávněného spoluhráče, účast, nominace). E-mailová adresa spoluhráčů se nezpřístupňuje.</p>
 <p>Údaje <strong>neprodáváme</strong> a nepoužíváme k cílené reklamě.</p>
 <h2>6. Uchovávání a mazání</h2>
 <p>Údaje účtu uchováváme po dobu existence účtu.</p>
@@ -139,7 +142,8 @@
 <li>odstraníme push tokeny vázané na účet;</li>
 <li>odpojíme účet od členství a nahradíme přímé identifikátory anonymizovanými hodnotami (např. „Bývalý člen“), včetně vynulování kapacitní skupiny na „neurčeno“;</li>
 <li>historické záznamy týmů a událostí mohou zůstat zachovány v anonymizované podobě kvůli integritě dat ostatních uživatelů;</li>
-<li>týmová loga se při zrušení (dissolve) týmu odstraňují z úložiště <strong>asynchronně</strong>; při pouhém odchodu člena logo týmu zůstává u týmu.</li>
+<li>týmová loga se při zrušení (dissolve) týmu odstraňují z úložiště <strong>asynchronně</strong>; při pouhém odchodu člena logo týmu zůstává u týmu;</li>
+<li>profilové fotografie se při smazání účtu (nebo výměně/odstranění fotografie) zařadí do fronty úklidu a odstraní z úložiště <strong>asynchronně</strong>.</li>
 </ul>
 <p>Technické provozní záznamy (např. metadata žádosti o smazání) můžeme krátkodobě uchovat v rozsahu nezbytném pro bezpečnost — konkrétní lhůty: <strong>TODO</strong>.</p>
 <h2>7. Zabezpečení</h2>
